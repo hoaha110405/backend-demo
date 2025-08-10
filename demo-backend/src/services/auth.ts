@@ -1,15 +1,15 @@
 import { PrismaClient } from "@prisma/client";
-import { IManualRegister, IRegisterBase } from "../interfaces/register";
-import { IRegisterStategy } from "../strategies/IRegisterStrategy";
-import { ManualRegisterStrategy } from "../strategies/ManualStrategy";
+import { IManualRegister, IRegisterBase } from "../interfaces/register.js";
+import { IRegisterStrategy } from "../strategies/IRegisterStrategy.js";
+import { ManualRegisterStrategy } from "../strategies/ManualStrategy.js";
 
 export class AuthService {
-  private strategy: IRegisterStategy<IRegisterBase>;
+  private strategy: IRegisterStrategy<IRegisterBase>;
   private prisma = new PrismaClient();
   constructor(type: string) {
     switch (type) {
-      case "MANUAL":
-        this.strategy = new ManualRegisterStrategy(this.prisma);
+      case "MANUAL":                                     // add to env or environment config --- Hoa: try to remember this
+        this.strategy = new ManualRegisterStrategy();
         break;
       default:
         throw new Error("Invalid registration method");

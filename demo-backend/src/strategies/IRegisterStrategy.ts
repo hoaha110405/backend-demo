@@ -1,5 +1,5 @@
-import { IRegisterBase } from "../interfaces/register";
+import { IRegisterBase } from "../interfaces/register.js";
 
-export interface IRegisterStategy<T extends IRegisterBase,TResult = JSON> {
-    createUser(data:T):Promise<TResult>
+export interface IRegisterStrategy<T extends IRegisterBase, TResult = any> {
+    createUser(data: T): Promise<TResult>;
 }

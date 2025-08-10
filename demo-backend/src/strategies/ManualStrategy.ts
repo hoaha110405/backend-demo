@@ -1,51 +1,48 @@
-import { PrismaClient } from '@prisma/client';
-import bcryptjs from 'bcryptjs';
-import { IManualRegister } from '../interfaces/register';
+import { PrismaClient } from "@prisma/client";
+import { IManualRegister, IOAuthRegister } from "../interfaces/register.js";
+import { IRegisterStrategy } from "./IRegisterStrategy.js";
+import bcrypt from 'bcryptjs'
 
-export class ManualRegisterStrategy {
-    private prisma: PrismaClient;
+const prisma = PrismaClient()
 
-    constructor(prisma: PrismaClient) {
-        this.prisma = prisma;
-    }
+export class ManualRegisterStrategy implements IRegisterStrategy<IManualRegister, any> {
+    async createUser(data: IManualRegister): Promise<any> {
 
-    async execute(data: IManualRegister): Promise<any> {
+        console.log("Creating manual user:", data);
+
+        const passwordHashed = await bcrypt.hash(data.password, 10);
+
         try {
-            // Hash the password
-            const hashedPassword =  bcryptjs.hashSync(data.password, 10)
-
-            // Create user in database
-            const user = await this.prisma.user.create({
-                data: {
-                    email: data.email,
-                    password: hashedPassword,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    avatar: data.avatar,
-                    type: data.type,
-                },
-                select: {
-                    id: true,
-                    email: true,
-                    firstName: true,
-                    lastName: true,
-                    avatar: true,
-                    type: true,
-                    createdAt: true,
-                }
-            });
-
-            return {
-                success: true,
-                data: user,
-                message: 'User registered successfully'
-            };
+        const user = await prisma.user.create({
+            data: {
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            password: passwordHashed,
+            createdAt: new Date(),
+            },
+            select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            role: true,
+            phone:true,
+            createdAt: true,
+            updatedAt: true,
+            },
+        });
+        
+        return user;
         } catch (error) {
-            return {
-                success: false,
-                error: error,
-                message: 'Failed to register user'
-            };
+            console.error("Error creating manual user:", error);
+            throw error;
         }
+    }
+}
+
+export class OAuthRegisterStategy implements IRegisterStrategy<IOAuthRegister, any> {
+    async createUser(data: IOAuthRegister): Promise<any> {
+        // do this later because haven't learn oauth yet
     }
 }
