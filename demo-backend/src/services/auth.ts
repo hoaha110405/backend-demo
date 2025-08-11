@@ -1,11 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-import { IManualRegister, IRegisterBase } from "../interfaces/register.js";
-import { IRegisterStrategy } from "../strategies/IRegisterStrategy.js";
-import { ManualRegisterStrategy } from "../strategies/ManualStrategy.js";
+import { IManualRegister, IRegisterBase } from "../interfaces/register";
+import { IRegisterStrategy } from "../strategies/IRegisterStrategy";
+import { ManualRegisterStrategy } from "../strategies/ManualStrategy";
 
 export class AuthService {
   private strategy: IRegisterStrategy<IRegisterBase>;
-  private prisma = new PrismaClient();
   constructor(type: string) {
     switch (type) {
       case "MANUAL":                                     // add to env or environment config --- Hoa: try to remember this
