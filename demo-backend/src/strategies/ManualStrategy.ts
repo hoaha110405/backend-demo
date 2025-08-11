@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { IManualRegister, IOAuthRegister } from "../interfaces/register.js";
-import { IRegisterStrategy } from "./IRegisterStrategy.js";
+import { IManualRegister, IOAuthRegister } from "../interfaces/register";
+import { IRegisterStrategy } from "./IRegisterStrategy";
 import bcrypt from 'bcryptjs'
 
-const prisma = PrismaClient()
+const prisma = new PrismaClient()
 
 export class ManualRegisterStrategy implements IRegisterStrategy<IManualRegister, any> {
     async createUser(data: IManualRegister): Promise<any> {

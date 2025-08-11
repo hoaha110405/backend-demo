@@ -1,17 +1,17 @@
-import express from 'express';
+// src/server.ts
+import express from "express";
+import { connectDB } from "./config/database";
+import authRouter from "./routes/auth"
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Middlewares
 app.use(express.json());
 
-// Routes
-app.get('/health', (_req, res) => {
-  res.json({ ok: true, ts: new Date().toISOString() });
-});
+app.use("/auth", authRouter)
 
-// Start server
-const PORT = Number(process.env.PORT) || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`[server] listening on http://localhost:${PORT}`);
+  await connectDB(); 
+  // kết nối DB
 });
