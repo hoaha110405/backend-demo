@@ -8,15 +8,23 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  firstName String?
-  lastName  String?
-  phone     String?  @unique
-  password  String
-  role      Role?    @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  googleId          String
+  email             String    @unique
+  username          String?   @unique
+  passwordHash      String? // BCrypt hashed password
+  // provider          UserProvider @default(LOCAL)
+  provider          String    @default("LOCAL")
+  firstName         String?
+  lastName          String?
+  phone             String?
+  avatar            String?
+  isActive          Boolean   @default(true)
+  emailVerified     Boolean   @default(false)
+  lastLoginAt       DateTime?
+  passwordChangedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@map("users")
 }
